@@ -1,5 +1,18 @@
 /**
  * SAUserPrefs plugin script
+ *
+ * @licstart  The following is the entire license notice for the
+ * JavaScript code in this file.
+ *
+ * Copyright (C) 2009-2014 Philip Weir
+ *
+ * The JavaScript code in this page is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in this file.
  */
 
 rcube_webmail.prototype.sauserprefs_toggle_level_char = function(checkbox) {
@@ -154,7 +167,7 @@ $(document).ready(function() {
 	if (window.rcmail) {
 		if (document.getElementById('spam-langs-table')) {
 			// add classes for sorting
-			$('#spam-langs-table thead td').eq(rcmail.env.sauserprefs_sort['#spam-langs-table'][0]).addClass(rcmail.env.sauserprefs_sort['#spam-langs-table'][1] == "true" ? 'sortedASC' : 'sortedDESC');
+			$('#spam-langs-table thead th').eq(rcmail.env.sauserprefs_sort['#spam-langs-table'][0]).addClass(rcmail.env.sauserprefs_sort['#spam-langs-table'][1] == "true" ? 'sortedASC' : 'sortedDESC');
 
 			var spam_langs_table = new rcube_list_widget(document.getElementById('spam-langs-table'), {});
 			spam_langs_table.init();
@@ -165,7 +178,7 @@ $(document).ready(function() {
 
 		if (document.getElementById('address-rules-table')) {
 			// add classes for sorting
-			$('#address-rules-table thead td').eq(rcmail.env.sauserprefs_sort['#address-rules-table'][0]).addClass(rcmail.env.sauserprefs_sort['#address-rules-table'][1] == "true" ? 'sortedASC' : 'sortedDESC');
+			$('#address-rules-table thead th').eq(rcmail.env.sauserprefs_sort['#address-rules-table'][0]).addClass(rcmail.env.sauserprefs_sort['#address-rules-table'][1] == "true" ? 'sortedASC' : 'sortedDESC');
 
 			var address_rules_table = new rcube_list_widget(document.getElementById('address-rules-table'), {});
 			address_rules_table.init();
@@ -510,19 +523,19 @@ $(document).ready(function() {
 
 				rcmail.register_command('plugin.sauserprefs.table_sort', function(props, obj) {
 					var id = props;
-					var idx = $(obj).parent('td').index();
-					var asc = !$(obj).parent('td').hasClass('sortedASC');
+					var idx = $(obj).parent('th').index();
+					var asc = !$(obj).parent('th').hasClass('sortedASC');
 
 					rcmail.sauserprefs_table_sort(id, idx, asc);
 
-					$(obj).parents('thead:first').find('td').removeClass('sortedASC').removeClass('sortedDESC');
+					$(obj).parents('thead:first').find('th').removeClass('sortedASC').removeClass('sortedDESC');
 					if (asc) {
-						$(obj).parent('td').addClass('sortedASC');
-						$(obj).parent('td').removeClass('sortedDESC');
+						$(obj).parent('th').addClass('sortedASC');
+						$(obj).parent('th').removeClass('sortedDESC');
 					}
 					else {
-						$(obj).parent('td').removeClass('sortedASC');
-						$(obj).parent('td').addClass('sortedDESC');
+						$(obj).parent('th').removeClass('sortedASC');
+						$(obj).parent('th').addClass('sortedDESC');
 					}
 
 					rcmail.env.sauserprefs_sort[id] = [idx, asc];
