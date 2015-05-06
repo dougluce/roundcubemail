@@ -22,26 +22,10 @@
   overflow: auto;
 }
 
-#sieverules-list-filters thead td
-{
-  height: 15px;
-}
-
-#sieverules-list-filters thead td span
+#sieverules-list h2 img
 {
   position: absolute;
-  top: 10px;
-  left: 8px;
-  right: 30px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-
-#sieverules-list-filters thead td img
-{
-  position: absolute;
-  top: 9px;
+  top: 7px;
   right: 8px;
 }
 
@@ -55,6 +39,11 @@
   overflow: auto;
 }
 
+#sieverules-list-examples thead th
+{
+  text-align: left;
+}
+
 #sieverules-details
 {
   position: absolute;
@@ -64,7 +53,8 @@
   bottom: 0;
 }
 
-#sieverules-advanced
+#sieverules-advanced,
+#sieverules-vacation
 {
   position: absolute;
   top: 0;
@@ -102,21 +92,25 @@ table.sieverules-table tbody td.control a,
 #rules-table tbody td.control a,
 #actions-table tbody td.control a
 {
-  display: block;
-  float: right;
+  display: inline-block;
   width: 16px;
   height: 16px;
   background-image: url(images/icons.png);
 }
 
+table.sieverules-table tbody td.control a {
+  height: 12px;
+}
+
+
 table.sieverules-table tbody td.control a.up_arrow
 {
-  background-position: 0 0;
+  background-position: 0 -1px;
 }
 
 table.sieverules-table tbody td.control a.down_arrow
 {
-  background-position: 0 -18px;
+  background-position: 0 -19px;
 }
 
 #rules-table tbody td.control,
@@ -169,7 +163,7 @@ table.records-table
 }
 
 table.records-table tbody td,
-table.records-table thead td
+table.records-table thead th
 {
   border: 0;
 }
@@ -409,7 +403,7 @@ input.inputmask
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eaeaea), color-stop(100%,#c8c8c8));
   background: -o-linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
   background: -ms-linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
-  background: linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
+  background: linear-gradient(to bottom, #eaeaea 0%, #c8c8c8 100%);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -425,4 +419,11 @@ input.inputmask
   height: 20px;
   background-image: url(images/listicons.png);
   background-position: 5px -52px;
+}
+
+#sieverules-vacation textarea,
+#sieverules-vacation #actions-table select,
+#sieverules-vacation #actions-table input[type=text] {
+  width: 99%;
+  min-width: 390px;
 }

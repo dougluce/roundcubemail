@@ -1,15 +1,31 @@
 <?php
 
 /*
- +-----------------------------------------------------------------------+
- | rcube_sieve class for managesieve operations (using PEAR::Net_Sieve)  |
- |                                                                       |
- | Author: Aleksander Machniak <alec@alec.pl>                            |
- | Modifications by: Philip Weir                                         |
- |   * Make ruleset name configurable                                    |
- |   * Added import functions                                            |
- +-----------------------------------------------------------------------+
-*/
+ * rcube_sieve class for managesieve operations (using PEAR::Net_Sieve)
+ *
+ * @author Aleksander Machniak <alec@alec.pl>
+ * @modified by Philip Weir
+ *   * Make ruleset name configurable
+ *   * Added import functions
+ *
+ * Copyright (C) 2009-2014 Philip Weir
+ *
+ * This program is a Roundcube (http://www.roundcube.net) plugin.
+ * For configuration see config.inc.php.dist.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Roundcube. If not, see http://www.gnu.org/licenses/.
+ */
 
 define('SIEVE_ERROR_CONNECTION', 1);
 define('SIEVE_ERROR_LOGIN', 2);
@@ -20,7 +36,7 @@ define('SIEVE_ERROR_OTHER', 255);		// other/unknown error
 
 class rcube_sieve
 {
-	private $sieve;
+	public $sieve;
 	private $ruleset;
 	private $importers = array();
 	private $elsif;
@@ -29,14 +45,14 @@ class rcube_sieve
 	public $list = array();
 	public $script;
 
-	public function __construct($username, $password, $host, $port, $auth_type = NULL, $usetls, $ruleset, $dir, $elsif = true, $auth_cid = NULL, $auth_pw = NULL)
+	public function __construct($username, $password, $host, $port, $auth_type = NULL, $usetls, $ruleset, $dir, $elsif = true, $auth_cid = NULL, $auth_pw = NULL, $socket_options = array())
 	{
 		$this->sieve = new Net_Sieve();
 
 		$data = rcube::get_instance()->plugins->exec_hook('sieverules_connect', array(
 			'username' => $username, 'password' => $password, 'host' => $host, 'port' => $port,
 			'auth_type' => $auth_type, 'usetls' => $usetls, 'ruleset' => $ruleset, 'dir' => $dir,
-			'elsif' => $elsif, 'auth_cid' => $auth_cid, 'auth_pw' => $auth_pw));
+			'elsif' => $elsif, 'auth_cid' => $auth_cid, 'auth_pw' => $auth_pw, 'socket_options' => $options));
 
 		$username = $data['username'];
 		$password = $data['password'];
@@ -49,8 +65,10 @@ class rcube_sieve
 		$elsif = $data['elsif'];
 		$auth_cid = $data['auth_cid'];
 		$auth_pw = $data['auth_pw'];
+		$socket_options = $data['socket_options'];
 
-		if (PEAR::isError($this->sieve->connect($host, $port, NULL, $usetls)))
+		$conn = $this->sieve->connect($host, $port, $socket_options, $usetls);
+		if ($conn instanceof PEAR_Error)
 			return $this->_set_error(SIEVE_ERROR_CONNECTION);
 
 		if (!empty($auth_cid)) {
@@ -59,7 +77,8 @@ class rcube_sieve
 			$password = $auth_pw;
 		}
 
-		if (PEAR::isError($this->sieve->login($username, $password, $auth_type ? strtoupper($auth_type) : NULL, $authz)))
+		$login = $this->sieve->login($username, $password, $auth_type ? strtoupper($auth_type) : NULL, $authz);
+		if ($login instanceof PEAR_Error)
 			return $this->_set_error(SIEVE_ERROR_LOGIN);
 
 		$this->ruleset = $ruleset;
@@ -114,12 +133,13 @@ class rcube_sieve
 
 		// allow additional actions before ruleset is saved
 		$data = rcube::get_instance()->plugins->exec_hook('sieverules_save', array(
-			'ruleset' => $this->ruleset, 'script' => $script));
+			'ruleset' => $this->ruleset, 'script' => $script, 'obj' => $this));
 
 		if ($data['abort'])
 			return $data['message'] ? $data['message'] : false;
 
-		if (PEAR::isError($this->sieve->installScript($this->ruleset, $data['script'])))
+		$result = $this->sieve->installScript($this->ruleset, $data['script']);
+		if ($result instanceof PEAR_Error)
 			return $this->_set_error(SIEVE_ERROR_INSTALL);
 
 		if ($this->cache) $_SESSION['sieverules_script_cache_' . $this->ruleset] = serialize($this->script);
@@ -182,13 +202,13 @@ class rcube_sieve
 
 		$this->list = $this->sieve->listScripts();
 
-		if (PEAR::isError($this->list))
+		if ($this->list instanceof PEAR_Error)
 			return $this->_set_error(SIEVE_ERROR_OTHER);
 
 		if (in_array($this->ruleset, $this->list)) {
 			$script = $this->sieve->getScript($this->ruleset);
 
-			if (PEAR::isError($script))
+			if ($script instanceof PEAR_Error)
 				return $this->_set_error(SIEVE_ERROR_OTHER);
 		}
 		else {
@@ -197,7 +217,7 @@ class rcube_sieve
 		}
 
 		$data = rcube::get_instance()->plugins->exec_hook('sieverules_load', array(
-			'ruleset' => $this->ruleset, 'script' => $script));
+			'ruleset' => $this->ruleset, 'script' => $script, 'obj' => $this));
 
 		$this->script = new rcube_sieve_script($data['script'], $this->get_extensions(), $this->elsif);
 
@@ -214,7 +234,8 @@ class rcube_sieve
 
 	public function set_active($ruleset)
 	{
-		if (PEAR::isError($this->sieve->setActive($ruleset)))
+		$active = $this->sieve->setActive($ruleset);
+		if ($active instanceof PEAR_Error)
 			return $this->_set_error(SIEVE_ERROR_ACTIVATE);
 
 		return true;

@@ -1,6 +1,16 @@
 Roundcube Webmail SieveRules
 ============================
 
+ * Fix missing size_test function in vacation validation
+
+Version 2.2 (2015-01-06, rc-1.1)
+=================================================
+ * Merge sievevacation plugin into this one
+ * Merge quickrules plugin into this one
+ * Add connection options like 109bcce
+ * Update after dev-accessibility merged to RC master
+ * Update to TinyMCE 4 (731d190)
+ * Add support for :matches
  * Drop IE6 support
 
 Version 2.1.2 (2014-03-30, rc-1.0)

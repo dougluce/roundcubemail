@@ -17,7 +17,7 @@ repository.
 Requirements
 ------------
 * [Roundcube jQueryUI plugin][rcjqui]
-* PEAR Net_Sieve 1.3.2 or newer ([included in Roundcube core][netsieve])
+* PEAR Net_Sieve 1.3.2 or newer (see [composer.json-dist][netsieve] included in Roundcube core)
 
 Supported Extensions
 --------------------
@@ -51,23 +51,7 @@ folder for details on the skin license.
 
 Install
 -------
-* For installation with Composer the pear repository must be included in the
-repositories section of the composer.json file in the Roundcube root. For
-example:
-```js
-"repositories": [
-	{
-	  "type": "composer",
-	  "url": "http://plugins.roundcube.net"
-	},
-	{
-	  "type": "pear",
-	  "url": "http://pear.php.net"
-	}
-]
-```
-* For direct download place this plugin folder into plugins directory of
-Roundcube
+* Place this plugin folder into plugins directory of Roundcube
 * Add sieverules to $config['plugins'] in your Roundcube config
 
 **NB:** When downloading the plugin from GitHub you will need to create a
@@ -109,6 +93,8 @@ The following options are available in each field:
   * 'notis' : is not equal to
   * 'exists' : exists
   * 'notexists' : does not exist
+  * 'matches' : matches wildcard string
+  * 'notmatches' : does not match wildcard string
   * 'regex' : matches regular expression
   * 'notregex' : does not match regular expression
   * 'count "gt"': count is greater than
@@ -202,12 +188,13 @@ have permission to read it.
 
 Import existing rulesets
 ------------------------
-The plugin contains a basic import system and 2 basic import filters. These
-example import filters are not perfect, use them with care you may lose some
-rule data! You can create your own filter (or modify existing ones), if you do
-please consider sharing it. To create an import filter you must add a file in
-the importFilters directory. The file must contain a class named
-'srimport_[filename]'. Each import filter must have:
+The plugin contains a basic import system and 2 example import filters. These
+filters are not perfect, use them with care you may lose some rule data! You
+can create your own filter (or modify existing ones). To create an import
+filter you must either rename one of the example files by removing .ex from
+the end of the file name or create your own file in the importFilters
+directory. The file must contain a class named 'srimport_[filename]'. Each
+import filter must have:
 * An attribute called name - this should be the user friendly name of the
 import e.g. Squirrelmail (Avelsieve)
 * A pubic function called detector - used to detect of if current rule file
@@ -280,6 +267,7 @@ sieverules_save hook if you want to keep them on the server.
 Arguments:
 * ruleset - (string) the name of the ruleset file
 * script - (string) the raw sieve script
+* obj - (object) the rcube_sieve object
 
 Return:
 * script - (string) the raw sieve script
@@ -292,6 +280,7 @@ like updating another system or performing further validation.
 Arguments:
 * ruleset - (string) the name of the ruleset file
 * script - (string) the raw sieve script
+* obj - (object) the rcube_sieve object
 
 Return:
 * script - (string) the raw sieve script
@@ -299,9 +288,32 @@ Return:
 * message - (string) optional reason why the script was not saved which
   will be shown to the user
 
+sieverules_list_rules hook
+--------------------------
+Before the list of rules is displayed in the UI the plugin hook
+sieverules_list_rules is executed, this allows you to hide rules from the
+list. It affects display only not the raw rules.
+Arguments:
+* idx - (int) the index of the rule being listed
+* name - (string) the name of the rule being listed
+
+Return:
+* abort - (boolean) if true the rule will be hidden from the list in the UI
+
+sieverules_list_rulesets hook
+-----------------------------
+Before the list of rulesets is displayed in the UI the plugin hook
+sieverules_list_rulesets is executed, this allows you to hide rulesets from the
+list. It affects display only not the raw rules.
+Arguments:
+* ruleset - (string) the name of the ruleset file
+
+Return:
+* abort - (boolean) if true the ruleset will be hidden from the list in the UI
+
 [alec]: mailto:alec@alec.pl
 [rcplugrepo]: http://plugins.roundcube.net/packages/johndoh/sieverules
 [releases]: http://github.com/JohnDoh/Roundcube-Plugin-SieveRules-Managesieve/releases
 [rcjqui]: http://github.com/roundcube/roundcubemail/tree/master/plugins/jqueryui
-[netsieve]: http://github.com/roundcube/roundcubemail/blob/master/program/lib/Net/Sieve.php
+[netsieve]: http://github.com/roundcube/roundcubemail/blob/master/composer.json-dist
 [gpl]: http://www.gnu.org/licenses/gpl.html
