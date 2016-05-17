@@ -3,11 +3,32 @@
 import sys
 import pwd
 import subprocess
+from time import sleep
+
 
 BLACKLIST = (
     # add blacklisted users here
     #'user1',
 )
+
+def set_password(user, password):
+    cmd = ["sudo", '/usr/bin/passwd', user]
+    p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
+    p.stdin.write(u'%(p)s\n%(p)s\n' % { 'p': password })
+    p.stdin.flush()
+    # Give `passwd` cmd 1 second to finish and kill it otherwise.
+    for x in range(0, 10):
+        if p.poll() is not None:
+            break
+        sleep(0.1)
+    else:
+        p.terminate()
+        sleep(1)
+        p.kill()
+        raise RuntimeError('Setting password failed. '
+                '`passwd` process did not terminate.')
+    if p.returncode != 0:
+        raise RuntimeError('`passwd` failed: %d' % p.returncode)
 
 try:
     username, password = sys.stdin.readline().split(':', 1)
@@ -26,7 +47,5 @@ if username in BLACKLIST:
     sys.exit('Changing password for user %s is forbidden (user blacklisted)' %
              username)
 
-handle = subprocess.Popen('/usr/sbin/chpasswd', stdin = subprocess.PIPE)
-handle.communicate('%s:%s' % (username, password))
+set_password(username, password)
 
-sys.exit(handle.returncode)

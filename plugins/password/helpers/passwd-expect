@@ -41,7 +41,7 @@
 # default values
 set host               "localhost"
 set login              "ssh"
-set program            "passwd"
+set program            "/usr/bin/passwd"
 set prompt_string      "(%|\\\$|>)"
 set fingerprint_string "The authenticity of host.* can't be established.*\nRSA key fingerprint is.*\nAre you sure you want to continue connecting.*"
 set password_string    "(P|p)assword.*"
@@ -74,8 +74,8 @@ gets stdin password(new)
 #set password(new) [lindex $argv 2]
 
 # no output to the user
-log_user 0
-
+#log_user 1
+set output true
 # read in other options
 for {set i 0} {$i<$argc} {incr i} {
     set arg [lindex $argv $i]
@@ -162,11 +162,11 @@ if {[string match $login "rlogin"]} {
 } elseif {[string match $login "slogin"]} {
    set pid [spawn slogin $host -l $user]
 } elseif {[string match $login "ssh"]} {
-   set pid [spawn ssh $host -l $user]
+   set pid [spawn ssh -o StrictHostKeyChecking=no $host -l $user]
 } elseif {[string match $login "ssh-exec"]} {
-   set pid [spawn ssh $host -l $user $program]
+   set pid [spawn ssh -o StrictHostKeyChecking=no $host -l $user $program]
 } elseif {[string match $login "sudo"]} {
-   set pid [spawn sudo -u $user $program]
+   set pid [spawn /usr/local/bin/sudo -u $user $program]
 } elseif {[string match $login "telnet"]} {
    set pid [spawn telnet $host]
    expect -re $login_string {
