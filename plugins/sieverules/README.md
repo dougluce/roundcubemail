@@ -5,15 +5,6 @@ Inspiration and most of the code for this plugin was taken from:
 [Aleksander Machniak][alec] - original Roundcube managesieve patch
 Tested with Dovecot-managesieve
 
-ATTENTION
----------
-This is just a snapshot from the GIT repository and is **NOT A STABLE version
-of SieveRules**. It is Intended for use with the **GIT-master** version of
-Roundcube and it may not be compatible with older versions. Stable versions of
-SieveRules are available from the [Roundcube plugin repository][rcplugrepo]
-(for 1.0 and above) or the [releases section][releases] of the GitHub
-repository.
-
 Requirements
 ------------
 * [Roundcube jQueryUI plugin][rcjqui]
@@ -175,16 +166,21 @@ Default sieve rule file
 If a default sieve rule file is specified then when a user has no sieve rules
 defined this file is loaded instead and the rules are displayed just as if they
 belong to the user. The file can be stored any where on your server and the
-user under which your web server runs must have permission to read it.
+user under which your web server runs must have permission to read it. The file
+must be in a the format that SieveRules can understand the easiest way to do
+this is to create the initial file using this plugin.
 
 Example sieve rule file
 -----------------------
 If an example sieve rule file is specified then the filters from this script
-are loaded and displayed in a drop down in the bottom right of the screen.
-Users can select one of these example rules, it will load in the just as one of
+are loaded and displayed in a list in the bottom right of the screen. Users
+can select one of these example rules, it will load in the just as one of
 their rules, edit it and then save it to their rule set. The file can be stored
 any where on your server and the user under which your web server runs must
-have permission to read it.
+have permission to read it. The file can be stored any where on your server and the
+user under which your web server runs must have permission to read it. The file
+must be in a the format that SieveRules can understand the easiest way to do
+this is to create the initial file using this plugin.
 
 Import existing rulesets
 ------------------------
@@ -197,9 +193,9 @@ directory. The file must contain a class named 'srimport_[filename]'. Each
 import filter must have:
 * An attribute called name - this should be the user friendly name of the
 import e.g. Squirrelmail (Avelsieve)
-* A pubic function called detector - used to detect of if current rule file
+* A public function called detector - used to detect of if current rule file
 was genereted with the software
-* A pubic function called importer - converts the rule file to SieveRules
+* A public function called importer - converts the rule file to SieveRules
 format
 
 The importer function can return either a string to be parsed by the SieveRules
