@@ -62,7 +62,9 @@ class rcube_sauserprefs_storage_sql
 			$pref_name = sauserprefs::map_pref_name($pref_name);
 			$pref_value = $sql_arr[$this->value_field];
 
-			if ($pref_name == 'whitelist_from' || $pref_name == 'blacklist_from' || $pref_name == 'whitelist_to')
+			if ($pref_name == 'whitelist_from' || $pref_name == 'blacklist_from' ||
+          $pref_name == 'whitelist_to' || $pref_name == 'more_spam_to'
+          || $pref_name == 'all_spam_to')
 				$prefs['addresses'][] = array('field' => $pref_name, 'value' => $pref_value);
 			else
 				$prefs[$pref_name] = $pref_value;
@@ -77,6 +79,7 @@ class rcube_sauserprefs_storage_sql
 					$user,
 					$sql_arr[$this->preference_field]);
 			}
+
 		}
 
 		return $prefs;
@@ -117,7 +120,6 @@ class rcube_sauserprefs_storage_sql
 							$address['value']);
 
 						$result = $this->db->affected_rows();
-
 						if (!$result) {
 							rcube::write_log('errors', 'sauserprefs error: cannot insert "' . $prefs[$idx] . '" = "' .  $vals[$idx] . '" for ' . $user_id);
 							break;

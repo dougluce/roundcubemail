@@ -301,13 +301,13 @@ $(document).ready(function() {
 						var prefs = document.getElementsByName('_address_rule_field[]');
 						var addresses = document.getElementsByName('_address_rule_value[]');
 
-						for (var i = 1; i < addresses.length; i++) {
-							if (addresses[i].value == input_spamaddress.value && actions[i].value != "DELETE") {
-								alert(rcmail.gettext('spamaddressexists','sauserprefs'));
-								input_spamaddress.focus();
-								return false;
-							}
-						}
+						//for (var i = 1; i < addresses.length; i++) {
+						//	if (addresses[i].value == input_spamaddress.value && actions[i].value != "DELETE") {
+						//		alert(rcmail.gettext('spamaddressexists','sauserprefs'));
+						//		input_spamaddress.focus();
+						//		return false;
+						//	}
+						//}
 
 						var newNode = adrTable.rows[0].cloneNode(true);
 						adrTable.rows[1].style.display = 'none';
