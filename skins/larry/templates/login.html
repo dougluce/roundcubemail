@@ -9,9 +9,13 @@
 <h1 class="voice"><roundcube:object name="productname" /> <roundcube:label name="login" /></h1>
 
 <div id="login-form">
-<div class="box-inner" role="main">
-<img src="/images/vader-painting-eyes.jpg" id="logo" alt="Vader Mail" border="0" style="display: block; margin: auto"/>
-<roundcube:form name="form" method="post">
+  <div class="box-inner" role="main"
+       style="background-image: url(skins/larry/images/chuckd-fist-big.png);
+              height: 315px; width: 430px">
+    <roundcube:form name="form" method="post"
+                    style="position: absolute;
+                           bottom: 0;
+                           height: 235px;">
 <roundcube:object name="loginform" form="form" size="40" submit=true />
 </form>
 
