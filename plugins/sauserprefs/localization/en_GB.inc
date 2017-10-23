@@ -33,7 +33,8 @@ $labels['blacklist_from'] = 'Reject Mail From';
 $labels['whitelist_to'] = 'Accept Mail Sent To';
 $labels['addrule'] = 'Add Rule';
 $labels['rule'] = 'Rule';
-$labels['importfromaddressbook'] = 'Import addresses from Address Book';
+$labels['importaddresses'] = 'Import addresses';
+$labels['importfromaddressbook'] = 'Import addresses from Contacts';
 $labels['deleteall'] = 'Delete All';
 $labels['autoscore'] = 'Auto';
 $labels['defaultscore'] = 'Default Score';
@@ -50,12 +51,19 @@ $labels['bayesspam'] = 'Spam threshold';
 $labels['bayesrules'] = 'Use Bayesian rules';
 $labels['help'] = 'Help';
 $labels['arialabelspamform'] = 'Spam settings form';
+$labels['moreinfo'] = 'See more information about this option';
+$labels['useawl'] = 'Auto-whitelist senders';
+$labels['score_blacklist'] = 'Blacklisted message score';
+$labels['score_whitelist'] = 'Whitelisted message score';
+$labels['testscores'] = 'Test Scores';
+$labels['test'] = 'Test';
+$labels['score'] = 'Score';
 
 $messages = array();
 $messages['sauserprefchanged'] = 'Successfully changed spam settings';
 $messages['sauserpreffailed'] = 'Error: Cannot change spam settings';
 $messages['spamthresexp'] = 'Anything above the threshold is marked as spam. Increasing this threshold will increase the amount of spam missed, but will reduce the risk of false positives.';
-$messages['spamlangexp'] = 'Select all the languages you expect to receive e-mail in. Any messages received that are written in non selected languages will be treated as possible spam.';
+$messages['spamlangexp'] = 'Select all the languages you expect to receive email in. Any messages received that are written in non selected languages will be treated as possible spam.';
 $messages['headersexp'] = 'SpamAssassin adds headers to processed messages providing information about the results. Use the options below to configure these headers.';
 $messages['spamtestssexp'] = 'Some checks use internet based services to help identify spam. Select the ones you wish to use:';
 $messages['spamreport'] = 'When a message is identified as spam a report of all tests and scores assigned is created...';
@@ -83,5 +91,4 @@ $messages['levelhelp'] = 'The \'Spam Level\' header can be added to a message to
 $messages['foldhelp'] = 'Should headers added by SpamAssassin be wrapped? In other words, should they be broken up into multiple lines instead of one very long one. When a line is broken it will be indented to mark it as a continuation of the preceding one.';
 $messages['bayesruleshlp'] = 'Before the Bayesian-style classifier can be used effectively it must be "trained" to properly detect spam/non spam messages. Disabling the Bayesian rules allows the system to continue to learn both automatically and manually from incoming mail but it will not be used to detect spam.';
 $messages['purgebayesconfirm'] = 'Are you sure delete all your Bayesian data?';
-
-?>
+$messages['useawlexp'] = 'Tracks scores from messages previously received and adjusts the message score, either by boosting messages from senders who send ham or penalizing senders who have sent spam previously. This not only treats some senders as if they were whitelisted but also treats spammers as if they were blacklisted. Each message from a particular sender adjusts the historical total score which can change them from a spammer if they send non-spam messages. Senders who are considered non-spammers can become treated as spammers if they send messages which appear to be spam.';

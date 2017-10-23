@@ -1,6 +1,25 @@
 Roundcube Webmail SAUserPrefs
 =============================
 
+ * Fix bug saving locales/langs options
+ * Depreciate sortedASC & sortedDESC class, use sorted-asc & sorted-desc instead
+ * Replace sauserprefs_score_inc config with sauserprefs_score_options
+ * Add use_auto_whitelist option
+ * Add score USER_IN_BLACKLIST option
+ * Add score USER_IN_WHITELIST option
+ * Add method to override any test score, see readme for more info
+
+Version 1.17 (2017-06-14, rc-1.3)
+=================================================
+ * "Flattened" the larry theme: fresher look by removing shadows and gradients
+
+Version 1.16 (2017-01-02, rc-1.1)
+=================================================
+ * More fixes for bayes learn thresholds
+ * Correct PHP warning when no address rules defined
+
+Version 1.15 (2015-04-02, rc-1.1)
+=================================================
  * Add plugin hook sauserprefs_sections_list
  * Add plugin hook sauserprefs_section_name
  * Add plugin hook sauserprefs_list
@@ -10,6 +29,7 @@ Roundcube Webmail SAUserPrefs
  * Split address book sync and import options
  * Allow for syncing and importing of multiple address books
  * Improve extensibility of storage class (again)
+ * Fix setting default score for bayes learn thresholds
 
 Version 1.14 (2015-01-06, rc-1.1)
 =================================================
